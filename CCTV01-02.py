@@ -3,6 +3,7 @@ import torch
 from paddleocr import PaddleOCR
 from ultralytics import YOLO
 import numpy as np
+from datetime import datetime
 from Model.imageProcess import f_image_read, f_image_preprocessing_010, f_save_image, f_imagesingle_read, f_image_box, f_image_box_license
 from Model.generalProcess import f_remove_special_char
 from Model.ocrProcess import f_ocr_process
@@ -29,11 +30,15 @@ while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         break
+
+    tanggal = datetime.today()
+    tanggal = tanggal.strftime('%Y%m%d%H%M%S')
+    
+    cv2.imwrite(filename=f"image_{tanggal}.jpeg", img=frame)
     
     frame_count += 1
     if frame_count % skip_frames != 0:
         continue
-
 
     #####################################################################
     # Vehicle Image Processing
@@ -51,7 +56,7 @@ while cap.isOpened():
             class_id = int(box.cls[0])
             confidence = box.conf[0]
 
-            if class_id in [2, 3, 5, 7] and confidence > 0.80:  # ID COCO untuk kendaraan
+            if class_id in [2, 3, 5, 7] and confidence > 0.50:  # ID COCO untuk kendaraan
                 # frame = f_image_box(frame, x1, x2, y1, y2, confidence)
 
                 # Crop gambar kendaraan dari frame asli
