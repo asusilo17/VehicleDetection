@@ -20,7 +20,7 @@ YoloModelLicenseNumber = YOLO("Yolo/best.pt")  # Deteksi plat nomor
 # === Konfigurasi Source Video ===
 # VIDEO_SOURCE = 'DataVideo/UNPAM_PARKIR_248202502221342.mp4'
 # VIDEO_SOURCE = 'DataVideo/UNPAM_PARKIR_248202502221338.mp4'
-VIDEO_SOURCE = 'DataVideo/B1127AFD.mp4'
+VIDEO_SOURCE = 'DataVideo/UNPAM_PARKIR_248202502221348.mp4'
 cap = cv2.VideoCapture(VIDEO_SOURCE)
 
 # === Queue untuk frame dan output ===
@@ -106,22 +106,13 @@ threading.Thread(target=capture_thread, daemon=True).start()
 threading.Thread(target=detection_thread, daemon=True).start()
 
 # === Loop utama untuk tampilkan hasil ===
-paused = False
-
 while True:
-    # Jika tidak di-pause dan queue tidak kosong, ambil frame terbaru
-    if not paused and not output_queue.empty():
+    if not output_queue.empty():
         display_frame = output_queue.get()
         cv2.imshow("ANPR Live Stream", display_frame)
 
-    key = cv2.waitKey(1) & 0xFF
-
-    # Tekan 'q' untuk keluar
-    if key == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-    # Tekan 'p' untuk pause/resume
-    elif key == ord('p'):
-        paused = not paused  # Toggle pause state
 
 cap.release()
 cv2.destroyAllWindows()

@@ -6,23 +6,39 @@ from datetime import datetime
 import pandas as pd
 import requests
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+server = os.getenv("db_server")
+database = os.getenv("db_name")
+username = os.getenv("db_userid")
+password = os.getenv("bd_userpwd")
+
+# Membuat string koneksi
+conn_str = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
 
 
-def f_sql_savePlateIdentification (p_conn_str, p_file_name, p_license_number, p_predict_pct, p_label, p_confidence, p_latitude, p_longitude, p_remark):
+def f_sql_savePlateIdentification (p_file_name, p_license_number, p_predict_pct=0, p_label="", p_confidence=0, p_latitude=0, p_longitude=0, p_remark=""):
     # print(f"data : {p_file_name}")
     
-    conn = pyodbc.connect(p_conn_str)
+    conn = pyodbc.connect(conn_str)
 
     # Membuat cursor untuk berinteraksi dengan database
     cursor = conn.cursor()
 
-    print(f"p_file_name : {p_file_name}, p_detect_img : {p_license_number}, p_detect_predictval : {p_predict_pct}, p_label : {p_label}, p_confidence : {p_confidence}, p_latitude : {p_latitude}, p_longitude : {p_longitude}, p_remark : {p_remark}")
+    # print(f"p_file_name : {p_file_name}, p_detect_img : {p_license_number}, p_detect_predictval : {p_predict_pct}, p_label : {p_label}, p_confidence : {p_confidence}, p_latitude : {p_latitude}, p_longitude : {p_longitude}, p_remark : {p_remark}")
+    sql = f"""insert into TransVehiceLicense (tvl_file_name, tvl_license_number, tvl_predict_pct, tvl_label, tvl_confidence, tvl_latitude, tvl_longitude, tvl_remark) values
+                ('{p_file_name}', '{p_license_number}', {p_predict_pct}, '{p_label}', {p_confidence}, {p_latitude}, {p_longitude}, '{p_remark}')
+                """
 
+    cursor.execute(sql)
     # Contoh query untuk mengambil data
-    cursor.execute('''
-        INSERT INTO TransVehiceLicense (tvl_file_name, tvl_license_number, tvl_predict_pct, tvl_label, tvl_confidence, tvl_latitude, tvl_longitude, tvl_remark)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (p_file_name, p_license_number, p_predict_pct, p_label, p_confidence, p_latitude, p_longitude, p_remark))
+    # cursor.execute('''
+    #     INSERT INTO TransVehiceLicense (tvl_file_name, tvl_license_number, tvl_predict_pct, tvl_label, tvl_confidence, tvl_latitude, tvl_longitude, tvl_remark)
+    #     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    #     ''', (p_file_name, p_license_number, p_predict_pct, p_label, p_confidence, p_latitude, p_longitude, p_remark))
     
     conn.commit()
 
