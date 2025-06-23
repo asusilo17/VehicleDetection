@@ -122,16 +122,16 @@ def f_sql_validate_wanprestasi(p_conn_str, p_license_number, p_location_id):
         cursor.close()
         conn.close()
 
-def f_sql_checking_wanprestasi(p_conn_str, p_license_number, p_location_id):
+def f_sql_checking_wanprestasi(p_license_number, p_location_id):
     # Koneksi ke database
-    conn = pyodbc.connect(p_conn_str)
+    conn = pyodbc.connect(conn_str)
 
     try:
         # Membuat cursor untuk interaksi dengan database
         cursor = conn.cursor()
 
         # Eksekusi stored procedure
-        cursor.execute(f"EXEC sp_getBlackList {p_license_number}, {p_location_id}")
+        cursor.execute(f"EXEC sp_getBlackList '{p_license_number}', {p_location_id}")
 
         # Mengambil hasil jika ada (misal hasil SELECT)
         columns = [column[0] for column in cursor.description] if cursor.description else []
