@@ -70,11 +70,11 @@ def f_image_box(image, x1, x2, y1, y2, confidence):
     cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 255), 2)    #Merah
     
     #Buat Background Text
-    cv2.rectangle(image, (x1, y1 - text_height - 15), (x1 + text_width, y1), (0, 0, 255), -1)  # Latar belakang merah
+    # cv2.rectangle(image, (x1, y1 - text_height - 15), (x1 + text_width, y1), (0, 0, 255), -1)  # Latar belakang merah
 
     # Gambar teks dengan warna kuning
-    cv2.putText(image, f"Vehicle ({confidence:.2f})", 
-                (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)  # Teks warna kuning
+    # cv2.putText(image, f"Vehicle ({confidence:.2f})", 
+    #             (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)  # Teks warna kuning
     
     return image
 
@@ -90,6 +90,43 @@ def f_image_box_license(image, x1, x2, y1, y2, teks):
 
     # Gambar teks dengan warna kuning
     cv2.putText(image, f"({teks})", 
-                (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)  # Teks warna kuning
+                (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)  # Teks warna kuning
     
+    return image
+
+def f_image_box_license_2(image, x1, x2, y1, y2, teks):
+    # Konfigurasi font
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = 1.0     # Perbesar ukuran font
+    font_thickness = 2
+    padding = 5          # Padding di sekitar teks
+    
+    label = f"{teks}"
+
+    # Ukuran teks
+    (text_width, text_height), baseline = cv2.getTextSize(label, font, font_scale, font_thickness)
+
+    # Hitung posisi background teks
+    bg_x1 = x1
+    bg_y1 = y1 - text_height - 2 * padding
+    bg_x2 = x1 + text_width + 2 * padding
+    bg_y2 = y1
+
+    # Jika posisi teks keluar gambar (misalnya terlalu atas), atur ke bawah kotak
+    if bg_y1 < 0:
+        bg_y1 = y2
+        bg_y2 = y2 + text_height + 2 * padding
+        text_y = bg_y2 - padding
+    else:
+        text_y = y1 - padding
+
+    # Gambar bounding box objek
+    cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 255), 2)  # Merah
+
+    # Gambar latar belakang teks
+    cv2.rectangle(image, (bg_x1, bg_y1), (bg_x2, bg_y2), (0, 0, 255), -1)  # Merah tua
+
+    # Gambar teks
+    cv2.putText(image, label, (x1 + padding, text_y), font, font_scale, (0, 255, 255), font_thickness)  # Kuning
+
     return image

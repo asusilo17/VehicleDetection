@@ -39,6 +39,7 @@ def process_video(video_path):
     VIDEO_SOURCE = video_path
     cap = cv2.VideoCapture(VIDEO_SOURCE)
 
+
     frame_queue.queue.clear()
     output_queue.queue.clear()
 
