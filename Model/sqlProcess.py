@@ -130,8 +130,10 @@ def f_sql_checking_wanprestasi(p_license_number, p_location_id):
         # Membuat cursor untuk interaksi dengan database
         cursor = conn.cursor()
 
+        sql = f"EXEC sp_getBlackList '{p_license_number}', {p_location_id}"
+        print(f"sql : {sql}")
         # Eksekusi stored procedure
-        cursor.execute(f"EXEC sp_getBlackList '{p_license_number}', {p_location_id}")
+        cursor.execute(sql)
 
         # Mengambil hasil jika ada (misal hasil SELECT)
         columns = [column[0] for column in cursor.description] if cursor.description else []
@@ -143,8 +145,69 @@ def f_sql_checking_wanprestasi(p_license_number, p_location_id):
         # Jika ada hasil, kembalikan sebagai DataFrame
         if result and columns:
             return pd.DataFrame.from_records(result, columns=columns)
+            # return pd.DataFrame.from_records(result)
         else:
             return pd.DataFrame()  # Kembalikan DataFrame kosong jika tidak ada hasil
+
+        # Mengembalikan hasil
+        # return result
+
+    except pyodbc.Error as e:
+        print(f"Error: {e}")
+        return None
+
+    finally:
+        # Menutup koneksi
+        cursor.close()
+        conn.close()
+
+def f_sql_checking_wanprestasi_data(p_license_number, p_location_id):
+    # Koneksi ke database
+    conn = pyodbc.connect(conn_str)
+
+    try:
+        # Membuat cursor untuk interaksi dengan database
+        cursor = conn.cursor()
+
+        sql = f"EXEC sp_getBlackList '{p_license_number}', {p_location_id}"
+        print(f"sql : {sql}")
+        # Eksekusi stored procedure
+        cursor.execute(sql)
+
+        # Ambil hasil dari stored procedure
+        rows = cursor.fetchall()
+
+        data = []
+        for row in rows:
+            data.append({
+                'PlatNumber': row[0],
+                'PaymentDate': row[1],
+                'LastInstallmentDate': row[2],
+                'Tenur': row[3],
+                'Brand': row[4],
+                'Model': row[5],
+                'Color': row[6],
+                'FullName': row[7],
+                'Gender': row[8],
+                'FullAddress': row[9],
+                'PhoneNumber': row[10],
+                'DetectionDT': row[11],
+                'LocationID': row[12],
+                'LocationName': row[13],
+                'Latitude': row[14],
+                'Longitude': row[15],
+                'Maps': row[16],
+                'LocationAddress': row[17],
+                'Collector': row[18],
+                'CollectorPhone': row[19],
+                'CollectorTelegram': row[20]
+            })
+        # Jika ada hasil, kembalikan sebagai DataFrame
+        if data:
+            return data
+            # return pd.DataFrame.from_records(result)
+        else:
+            return data  # Kembalikan DataFrame kosong jika tidak ada hasil
 
         # Mengembalikan hasil
         # return result
