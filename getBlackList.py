@@ -5,6 +5,7 @@ import sqlite3
 from datetime import datetime
 import pandas as pd
 import requests
+import cv2
 from datetime import datetime
 from dotenv import load_dotenv
 import os
@@ -17,8 +18,15 @@ bot_name = os.getenv('bot_name')
 
 datas = f_sql_checking_wanprestasi_data('A1206YV',2)
 rtsp_url = 'DataVideo/videoplayback_2.mp4'
+
+image = cv2.imread("ImgTest/image_20250604224822.jpeg")
+today = datetime.today()
+today = today.strftime('%Y-%M-%d')
+
+print(f"today : {today}")
+
 # if data:
-# print(f"datas : {datas}")
+print(f"datas : {datas}")
 if datas:
     # print(f"datas : {datas}")
     for data in datas:
@@ -29,10 +37,10 @@ if datas:
                             p_chatid=data['CollectorTelegram'],
                             p_pic=data['Collector'],
                             p_debitorname=data['Collector'],
-                            p_photo_cv2="ImgTest/image_20250604224822.jpeg",
+                            p_photo_cv2=image,
                             p_license_plate='A1206YV',
                             p_location=data['LocationName'],
                             p_address=data['LocationAddress'],
                             p_maps_url=data['Maps'],
-                            p_date="2025-02-03"
+                            p_date=today
                         )
