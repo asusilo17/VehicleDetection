@@ -32,7 +32,7 @@ YoloModelLicenseNumber = YOLO("Yolo/best.pt")
 
 # Konfigurasi RTSP CCTV
 # rtsp_url = "rtsp://username:password@ip_camera:port/stream"
-rtsp_url = 'DataVideo/A1206YV.mp4'
+rtsp_url = 'DataVideo/F5864AAO.mp4'
 cap = cv2.VideoCapture(rtsp_url)
 
 # Konfigurasi skipping frame
@@ -52,8 +52,6 @@ while cap.isOpened():
         if frame_count % skip_frames != 0:
             continue
 
-
-
         vehicle_mask = np.zeros(frame.shape[:2], dtype=np.uint8)
         original_frame = frame.copy()
 
@@ -68,7 +66,7 @@ while cap.isOpened():
                 class_id = int(box.cls[0])
                 confidence = box.conf[0]
 
-                if class_id in [2, 3, 5, 7] and confidence > 0.50:
+                if class_id in [2, 3, 5, 7] and confidence > 0.10:
                     # frame = f_image_box(frame, x1, x2, y1, y2, confidence)
 
 
@@ -87,7 +85,7 @@ while cap.isOpened():
                             lp_conf = lp_box.conf[0]
 
                             if lp_conf > 0.1:
-                                # f_image_box_license(frame, lx1, lx2, ly1, ly2, lp_conf)
+                                # f_image_b ox_license(frame, lx1, lx2, ly1, ly2, lp_conf)
 
                                 scale_x = vw / 640
                                 scale_y = vh / 640
@@ -118,7 +116,7 @@ while cap.isOpened():
                                                                     p_license_number=plat_number,
                                                                     p_confidence=lp_conf)
                                     
-                                    dataWanprestasi = f_sql_checking_wanprestasi_data(plat_number, iot_location_id)
+                                    # dataWanprestasi = f_sql_checking_wanprestasi_data(plat_number, iot_location_id)
 
                                     # if dataWanprestasi:
                                     #     # print(f"datas : {datas}")
