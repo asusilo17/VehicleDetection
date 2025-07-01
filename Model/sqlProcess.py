@@ -18,7 +18,7 @@ password = os.getenv("bd_userpwd")
 
 # Membuat string koneksi
 conn_str = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
-
+print(f"conn_str : {conn_str}")
 
 def f_sql_savePlateIdentification (p_file_name, p_license_number, p_predict_pct=0, p_label="", p_confidence=0, p_latitude=0, p_longitude=0, p_remark=""):
     # print(f"data : {p_file_name}")
@@ -220,3 +220,31 @@ def f_sql_checking_wanprestasi_data(p_license_number, p_location_id):
         # Menutup koneksi
         cursor.close()
         conn.close()
+
+def f_sql_object_detection(p_label_name, p_yolo_model, p_object_type, p_confidence, p_start_dt, p_end_dt):
+    conn = pyodbc.connect(conn_str)
+    cursor = conn.cursor()
+
+    success = True
+
+    sql = f"""insert into t_object_detection (label_name, yolo_model, object_type, confidence, process_start_dt, process_end_dt) values
+                ('{p_label_name}', '{p_yolo_model}', '{p_object_type}', {p_confidence}, '{p_start_dt}', '{p_end_dt}')
+            """
+
+    try:
+        print(f"sql : {sql}")
+        
+        cursor.execute(sql)
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return True
+    except Exception as e:
+        conn.rollback()
+        cursor.close()
+        conn.close()
+        
+        success = False
+        # return success
+        raise RuntimeError(f"An unexpected error stopped the process: {e}") from e
