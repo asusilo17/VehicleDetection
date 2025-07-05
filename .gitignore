@@ -6,3 +6,4 @@ DataVideo/
 ImgResult/
 .venv/
 *.pyc
+TrainingModel/
