@@ -80,17 +80,17 @@ def f_image_box(image, x1, x2, y1, y2, confidence):
 
 def f_image_box_license(image, x1, x2, y1, y2, teks):
     # Menentukan ukuran teks terlebih dahulu untuk membuat latar belakang yang tepat
-    # (text_width, text_height), _ = cv2.getTextSize(f"{teks}", cv2.FONT_HERSHEY_SIMPLEX, 0.5, 2)
+    (text_width, text_height), _ = cv2.getTextSize(f"{teks}", cv2.FONT_HERSHEY_SIMPLEX, 0.5, 2)
 
     #Buat Garis Kotak
     cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 255), 2)    #Merah
     
     #Buat Background Text
-    # cv2.rectangle(image, (x1, y1 - text_height - 15), (x1 + text_width, y1), (0, 0, 255), -1)  # Latar belakang merah
+    cv2.rectangle(image, (x1, y1 - text_height - 15), (x1 + text_width, y1), (0, 0, 255), -1)  # Latar belakang merah
 
     # Gambar teks dengan warna kuning
-    # cv2.putText(image, f"({teks})", 
-    #             (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)  # Teks warna kuning
+    cv2.putText(image, f"{teks}", 
+                (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)  # Teks warna kuning
     
     return image
 

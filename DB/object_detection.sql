@@ -16,12 +16,7 @@ group by
 yolo_model,
 label_name
 
---select	
---* 
---from #tempdata
---order by 1
-
-select
+select	
 yolo_model,
 count(1) JumlahDeteksi,
 SUM(DATEDIFF(second, process_start_dt, process_end_dt)) as duration,
@@ -29,4 +24,12 @@ AVG(confidence) confidence
 from #tempdata
 group by 
 yolo_model
+order by 1
+
+
+select	
+*
+--distinct label_name
+from #tempdata
+where yolo_model = 'yolov10m.pt'
 order by 1
