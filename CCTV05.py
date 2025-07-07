@@ -27,7 +27,7 @@ today = datetime.today()
 today = today.strftime('%Y-%M-%d')
 
 # YOLO Modeling
-YoloModelVehicle = YOLO("Yolo/yolov10n.pt")  # Model YOLOv8 Nano untuk deteksi kendaraan
+YoloModelVehicle = YOLO("Yolo/yolov10m.pt")  # Model YOLOv8 Nano untuk deteksi kendaraan
 YoloModelLicenseNumber = YOLO("Yolo/best.pt")
 
 # Konfigurasi RTSP CCTV

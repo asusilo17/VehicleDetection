@@ -4,5 +4,10 @@
 Yolo/
 DataVideo/
 ImgResult/
+ImgTest/
+ImgVehicle/
 .venv/
 *.pyc
+TrainingModel/
+DataTraining/
+DataSet/
