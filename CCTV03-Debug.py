@@ -22,7 +22,7 @@ YoloModelLicenseNumber = YOLO("Yolo/best.pt")
 # Konfigurasi RTSP CCTV
 # rtsp_url = "rtsp://username:password@ip_camera:port/stream"
 plat_number = ""
-filename = "B3083BWS"
+filename = "A1206YV"
 rtsp_url = f"DataVideo/{filename}.mp4"
 cap = cv2.VideoCapture(rtsp_url)
 
