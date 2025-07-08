@@ -24,7 +24,7 @@ bot_uname = os.getenv('bot_uname')
 bot_name = os.getenv('bot_name')
 
 today = datetime.today()
-today = today.strftime('%Y-%M-%d')
+today = today.strftime('%Y-%m-%d %H:%M')
 
 # YOLO Modeling
 YoloModelVehicle = YOLO("Yolo/yolov10m.pt")  # Model YOLOv8 Nano untuk deteksi kendaraan
