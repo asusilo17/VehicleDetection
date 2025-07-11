@@ -1,4 +1,5 @@
 ## Modeling memproses seluruh video di dalam folder
+## Untuk kebutuhan menghitung dan evaluasi keberhasilan pembacaan vidio
 
 import cv2
 import torch
