@@ -22,6 +22,7 @@ df_cm = pd.DataFrame(cm,
 precision = TP / (TP + FP) if (TP + FP) > 0 else 0
 recall = TP / (TP + FN) if (TP + FN) > 0 else 0
 f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+accuracy = (TP + TN) / (TP + TN + FP + FN) if (TP + TN + FP + FN) > 0 else 0
 
 # --- Visualisasi Confusion Matrix Heatmap ---
 plt.figure(figsize=(7, 5))
@@ -34,10 +35,10 @@ plt.tight_layout()
 plt.show()
 
 # --- Visualisasi Evaluation Metrics ---
-metrics = ['Precision', 'Recall', 'F1 Score']
-values = [precision, recall, f1]
+metrics = ['Accuracy', 'Precision', 'Recall', 'F1 Score']
+values = [accuracy, precision, recall, f1]
 
-plt.figure(figsize=(6, 4))
+plt.figure(figsize=(7, 4))
 sns.barplot(x=metrics, y=values, palette='viridis')
 plt.ylim(0, 1.1)
 plt.title("Evaluation Metrics")
@@ -51,3 +52,4 @@ print("=== Evaluation Metrics ===")
 print(f"Precision: {precision:.3f}")
 print(f"Recall   : {recall:.3f}")
 print(f"F1 Score : {f1:.3f}")
+print(f"Accuracy : {accuracy:.3f}")
