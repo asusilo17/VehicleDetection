@@ -94,11 +94,14 @@ for rtsp_url in video_files:
                                 if plat_number:
                                     # Jika ingin anotasi box disimpan ke file atau log, bisa disimpan di sini
                                     # frame = f_image_box_license_2(frame, abs_lx1, abs_lx2, abs_ly1, abs_ly2, plat_number)
+                                    nama_file = rtsp_url.replace("DataVideo\\",'')
+                                    nama_file = nama_file.replace('.mp4','')
 
                                     f_sql_savePlateIdentification(
                                         p_file_name=rtsp_url,
                                         p_license_number=plat_number,
-                                        p_confidence=lp_conf
+                                        p_confidence=lp_conf,
+                                        p_metode="PaddleOCR"
                                     )
 
     cap.release()

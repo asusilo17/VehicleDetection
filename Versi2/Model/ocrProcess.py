@@ -97,3 +97,33 @@ def f_pytesseract_process(image):
         print("Gagal dapat hasil OCR")
 
     return plat_detect, plat_detect
+
+def read_plate_number(results, frame, reader):
+    n = len(results)
+    x_shape, y_shape = frame.shape[1], frame.shape[0]
+
+    for i in range(n):
+        row = results[i] # Iterate through each image
+        if row[4] >= 0.5: ## Take img with 0.5 confidence
+            xmin, ymin, xmax, ymax = row[:4]
+            plate = frame[int(ymin):int(ymax), int(xmin):int(xmax)]
+
+            ## Preprocess Plate
+            gray = cv2.cvtColor(plate, cv2.COLOR_BGR2GRAY)
+            blurred = cv2.bilateralFilter(gray, 17, 15, 15)
+#             ret, thresh = cv.threshold(blurred, 125, 255, cv.THRESH_BINARY)
+
+            ## OCR
+            text = reader.readtext(blurred)
+            text = ' '.join([t[1] for t in text])
+
+            plot_img = frame.copy()
+
+            cv2.rectangle(plot_img, (int(xmin), int(ymin)), (int(xmax), int(ymax)), (0, 255, 0), 2) ## BBox
+            cv2.rectangle(plot_img, (int(xmin), int(ymin-20)), (int(xmax), int(ymin)), (0, 255,0), -1) ## for text label background
+            final_img = cv2.putText(plot_img, f"{text}", (int(xmin), int(ymin)), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255), 2)
+            
+            return final_img
+
+#             return cv.cvtColor(final_img, cv.COLOR_BGR2RGB)
+#             cv.imwrite(f'/kaggle/working/labeled_img_{i}.jpg', cv.cvtColor(final_img, cv.COLOR_BGR2RGB))
