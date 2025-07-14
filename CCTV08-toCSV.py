@@ -103,11 +103,11 @@ for rtsp_url in video_files:
 
                                     plat_number = op.correct_ocr_plate(plat_number)
 
-                                    csv.f_savePlateIdentification_to_csv(
+                                    sqlp.f_sql_savePlateIdentification(
                                         p_file_name=rtsp_url,
                                         p_license_number=plat_number,
                                         p_confidence=lp_conf,
-                                        p_metode="PaddleOCR"
+                                        p_metode=YoloModelLicenseNumber
                                     )
 
     cap.release()
