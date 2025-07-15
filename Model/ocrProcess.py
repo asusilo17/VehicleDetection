@@ -97,3 +97,49 @@ def f_pytesseract_process(image):
         print("Gagal dapat hasil OCR")
 
     return plat_detect, plat_detect
+
+def correct_ocr_plate_dynamic(plate):
+    if not plate:
+        return plate
+
+    # Peta koreksi karakter OCR yang sering salah
+    ocr_correction_map = {
+        '0': 'O',
+        '1': 'I',
+        '2': 'Z',
+        '5': 'S',
+        '8': 'B'
+    }
+
+    # Mulai dari belakang dan cari karakter terakhir yang bukan huruf
+    i = len(plate) - 1
+    while i >= 0 and (plate[i].isalpha() or plate[i].isdigit()):
+        i -= 1
+
+    # Bagian depan = sebelum i+1, bagian belakang (kemungkinan huruf) = setelah i
+    number_part = plate[:i+1]
+    letter_part = plate[i+1:]
+
+    # Koreksi hanya di letter_part
+    corrected_letter_part = ''.join(ocr_correction_map.get(ch, ch) for ch in letter_part)
+
+    return number_part + corrected_letter_part
+
+def correct_ocr_plate(plate):
+    ocr_correction_map = {
+    '0': 'O',
+    '1': 'I',
+    '5': 'S',
+    '8': 'B',
+    '2': 'Z'
+    }
+    # Koreksi hanya di 2 karakter terakhir
+    if len(plate) >= 2:
+        corrected = ''
+        for char in plate[-2:]:
+            if char in ocr_correction_map:
+                corrected += ocr_correction_map[char]
+            else:
+                corrected += char
+        plate = plate[:-2] + corrected
+    return plate

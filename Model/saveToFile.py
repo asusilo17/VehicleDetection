@@ -20,9 +20,9 @@ def f_savePlateIdentification_to_csv(
         p_metode, created_date
     ]
 
-    # Menulis ke file CSV
+    # Menulis ke file CSV dengan delimiter titik koma
     with open(csv_filename, mode='a', newline='', encoding='utf-8') as csvfile:
-        writer = csv.writer(csvfile)
+        writer = csv.writer(csvfile, delimiter=';')
         if not file_exists:
             # Header kolom (jika file belum ada)
             writer.writerow([
@@ -31,3 +31,4 @@ def f_savePlateIdentification_to_csv(
                 "tvl_remark", "metode", "tvl_capture_datetime"
             ])
         writer.writerow(row)
+    
