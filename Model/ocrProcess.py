@@ -14,6 +14,7 @@ easy_ocr = easyocr.Reader(['en'])  # 'en' untuk bahasa Inggris
 def f_ocr_process(image):
     plat_detect = ""
     plat_predictval = ""
+    confidence = 0
 
     ocr_result = paddle_ocr.ocr(image)
 
@@ -30,8 +31,75 @@ def f_ocr_process(image):
                 plat_predictval = ocr_result[0][0][1][1]
 
                 plat_detect = f_remove_special_char(plat_detect)
+                plat_detect = correct_ocr_plate(plat_detect)
 
-    return plat_detect, plat_detect
+    return plat_detect, confidence
+
+def f_ocr_process_bp(image):
+    plat_detect = ""
+    plat_predictval = ""
+    confidence = 0
+
+    data = []
+
+    ocr_result = paddle_ocr.ocr(image)
+
+    if ocr_result is None or ocr_result[0] is None:
+        print(f"Gagal dapat hasil OCR")
+    else:
+        # Loop untuk mengekstrak data dan melakukan insert
+        for group in ocr_result:
+            for coords, label_confidence in group:
+                label, confidence = label_confidence  # Mengambil label dan confidence
+
+                #Mendapatkan plat nomor yang terdeteksi
+                plat_detect = ocr_result[0][0][1][0]
+                plat_predictval = ocr_result[0][0][1][1]
+
+                plat_detect = f_remove_special_char(plat_detect)
+                plat_detect = correct_ocr_plate(plat_detect)
+
+                data.append({
+                    "plat_detect": plat_detect,
+                    "confidence": confidence
+                })
+
+    return data
+
+def f_ocr_process_prepare(image):
+    plat_detect = ""
+    plat_predictval = ""
+
+    resized = cv2.resize(image, (640, 640), interpolation=cv2.INTER_LINEAR)
+
+
+    gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
+    
+
+    thresh = cv2.adaptiveThreshold(resized, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                               cv2.THRESH_BINARY, 11, 2)
+    
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+    cleaned = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+
+    ocr_result = paddle_ocr.ocr(cleaned)
+
+    if ocr_result is None or ocr_result[0] is None:
+        print(f"Gagal dapat hasil OCR")
+    else:
+        # Loop untuk mengekstrak data dan melakukan insert
+        for group in ocr_result:
+            for coords, label_confidence in group:
+                label, confidence = label_confidence  # Mengambil label dan confidence
+
+                #Mendapatkan plat nomor yang terdeteksi
+                plat_detect = ocr_result[0][0][1][0]
+                plat_predictval = ocr_result[0][0][1][1]
+
+                plat_detect = f_remove_special_char(plat_detect)
+                plat_detect = correct_ocr_plate(plat_detect)
+
+    return plat_detect, confidence
 
 
 def f_easyocr_process(image):
