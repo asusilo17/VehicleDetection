@@ -2,12 +2,12 @@ import csv
 import os
 from datetime import datetime
 
-def f_savePlateIdentification_to_csv(
-    p_file_name, p_license_number, p_predict_pct=0, p_label="",
+def f_savePlateIdentification_to_csv(p_outputfile="plate_results",
+    p_file_name="", p_license_number="", p_predict_pct=0, p_label="",
     p_confidence=0, p_latitude=0, p_longitude=0,
     p_remark="", p_metode=""
 ):
-    csv_filename = "plate_results.csv"
+    csv_filename = f"{p_outputfile}.csv"
     file_exists = os.path.isfile(csv_filename)
 
     # Ambil waktu saat ini dalam format 'YYYY-MM-DD HH:MM:SS'

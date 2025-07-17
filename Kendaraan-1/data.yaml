@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 3
+names: ['kendaraan berat', 'kendaraan ringan', 'kendaraan sedang']
+
+roboflow:
+  workspace: ubaidillah
+  project: kendaraan-9nepm
+  version: 1
+  license: Public Domain
+  url: https://universe.roboflow.com/ubaidillah/kendaraan-9nepm/dataset/1
