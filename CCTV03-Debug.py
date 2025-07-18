@@ -94,15 +94,15 @@ while cap.isOpened():
                             plat_number, plat_conf = f_ocr_process(license_crop)
 
                             if plat_number:
-                                frame = f_image_box(frame, abs_lx1, abs_lx2, abs_ly1, abs_ly2, plat_number)
+                                # frame = f_image_box(frame, abs_lx1, abs_lx2, abs_ly1, abs_ly2, plat_number)
 
-                                cv2.imwrite(filename=f"ImgResult/{filename}-plat-{frame_count}.jpeg",
-                                            img=frame)
+                                # cv2.imwrite(filename=f"ImgResult/{filename}-plat-{frame_count}.jpeg",
+                                #             img=frame)
 
                                 frame = f_image_box_license_2(frame, abs_lx1, abs_lx2, abs_ly1, abs_ly2, plat_number)
 
-                                cv2.imwrite(filename=f"ImgResult/{filename}-{plat_number}-{frame_count}.jpeg",
-                                            img=frame)
+                                # cv2.imwrite(filename=f"ImgResult/{filename}-{plat_number}-{frame_count}.jpeg",
+                                #             img=frame)
 
                                 f_sql_savePlateIdentification(p_file_name=rtsp_url,
                                                                 p_license_number=plat_number,
