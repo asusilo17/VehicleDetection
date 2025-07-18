@@ -188,3 +188,71 @@ def f_image_box_license_2(image, x1, x2, y1, y2, teks):
     cv2.putText(image, label, (x1 + padding, text_y), font, font_scale, (0, 255, 255), font_thickness)  # Kuning
 
     return image
+
+
+def f_draw_ocr(frame, text, font_scale=1, color=(255, 0, 0), thickness=2):
+    """
+    Menampilkan teks hasil OCR ke dalam frame di pojok kiri bawah.
+
+    Params:
+        frame      : np.array (gambar/frame OpenCV)
+        text       : str (teks hasil pembacaan karakter plat)
+        font_scale: float (ukuran teks)
+        color      : tuple BGR (warna teks)
+        thickness  : int (ketebalan teks)
+
+    Returns:
+        frame      : np.array (frame dengan teks tertempel)
+    """
+    height, width = frame.shape[:2]
+    font = cv2.FONT_HERSHEY_SIMPLEX
+
+    # Hitung ukuran teks untuk menentukan posisi
+    (text_width, text_height), _ = cv2.getTextSize(text, font, font_scale, thickness)
+
+    # Posisi pojok kiri bawah (10 px dari kiri, 10 px dari bawah)
+    x = 20
+    # y = height - 10
+    y = 50
+
+    # Tempel teks ke frame
+    cv2.putText(frame, text, (x, y), font, font_scale, color, thickness, lineType=cv2.LINE_AA)
+
+    return frame
+
+def draw_static_text_top_left(frame, text):
+    """
+    Menampilkan teks di pojok kiri atas dengan background hitam berukuran tetap.
+
+    - Ukuran background tidak berubah (statis).
+    - Tidak menghitung panjang teks.
+    - Posisi dan ukuran sudah fixed.
+
+    Params:
+        frame : np.array (gambar)
+        text  : str (teks yang ditampilkan)
+
+    Returns:
+        frame : np.array (gambar dengan teks dan background)
+    """
+    # Ukuran dan posisi background tetap
+    rect_x, rect_y = 20, 50
+    rect_width, rect_height = 550, 50  # Ukuran tetap
+
+    # Warna background: hitam
+    cv2.rectangle(frame,
+                  (rect_x, rect_y),
+                  (rect_x + rect_width, rect_y + rect_height),
+                  (181, 184, 189),  # Hitam
+                  -1)         # Fill rectangle
+
+    # Tampilkan teks di dalam kotak (posisi tetap)
+    text_x, text_y = rect_x + 15, rect_y + 35
+    cv2.putText(frame, text, (text_x, text_y),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.9,                # Ukuran font
+                (255, 0, 0),        # Warna teks (hijau)
+                2,                  # Ketebalan font
+                cv2.LINE_AA)
+
+    return frame
